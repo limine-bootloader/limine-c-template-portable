@@ -39,8 +39,6 @@ SECTIONS
 
     .data : {
         *(.data .data.*)
-        __global_pointer$ = . + 0x800;
-        *(.sdata .sdata.*)
     } :data
 
     /* Dynamic section for relocations, both in its own PHDR and inside data PHDR */
@@ -54,7 +52,6 @@ SECTIONS
     /* above this. */
     .bss : {
         *(COMMON)
-        *(.sbss .sbss.*)
         *(.bss .bss.*)
     } :data
 

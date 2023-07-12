@@ -107,7 +107,8 @@ else ifeq ($(ARCH),riscv64)
     override CFLAGS += \
         -mabi=lp64
     override LDFLAGS += \
-        -m elf64lriscv
+        -m elf64lriscv \
+        --no-relax
 else
     $(error Architecture $(ARCH) not supported)
 endif
