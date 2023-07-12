@@ -78,6 +78,10 @@ endif
 
 # Architecture specific internal flags.
 ifeq ($(ARCH),x86_64)
+    ifeq ($(CC_IS_CLANG),yes)
+        override CC += \
+            -target x86_64-elf
+    endif
     override CFLAGS += \
         -m64 \
         -march=x86-64 \
@@ -92,12 +96,18 @@ ifeq ($(ARCH),x86_64)
     override NASMFLAGS += \
         -f elf64
 else ifeq ($(ARCH),aarch64)
+    ifeq ($(CC_IS_CLANG),yes)
+        override CC += \
+            -target aarch64-elf
+    endif
     override CFLAGS += \
         -mgeneral-regs-only
     override LDFLAGS += \
         -m aarch64elf
 else ifeq ($(ARCH),riscv64)
     ifeq ($(CC_IS_CLANG),yes)
+        override CC += \
+            -target riscv64-elf
         override CFLAGS += \
             -march=rv64imac
     else

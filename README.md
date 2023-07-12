@@ -14,10 +14,10 @@ The `ARCH` make variable determines the target architecture to build the kernel 
 
 For example, to build for `aarch64` run:
 ```sh
-make ARCH=aarch64 CC="clang -target aarch64-elf" LD="ld.lld"
+make ARCH=aarch64 CC="clang" LD="ld.lld"
 ```
 
 The image can then be tested with the one of the `run` or `run-hdd` targets.
 ```sh
-make ARCH=aarch64 CC="clang -target aarch64-elf" LD="ld.lld" run
+make ARCH=aarch64 CC="clang" LD="ld.lld" run
 ```
