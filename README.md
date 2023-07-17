@@ -9,6 +9,7 @@ It is also recommended to cross reference the contents of this repository with [
 ## Building
 
 It is recommended to build this project using a standard Linux distro, using a Clang/LLVM toolchain capable of cross compilation.
+Alternatively if you are able you may run `nix-shell` to end up in a dev enviroment with all the tools required.
 
 The `ARCH` make variable determines the target architecture to build the kernel and image for. The `all` target (the default one) builds the kernel for the given architecture, and a bootable `.iso` image containing it. The `all-hdd` target builds a flat hard disk/USB image instead.
 
