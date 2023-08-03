@@ -115,7 +115,8 @@ else ifeq ($(ARCH),riscv64)
             -march=rv64imac_zicsr_zifencei
     endif
     override CFLAGS += \
-        -mabi=lp64
+        -mabi=lp64 \
+        -mno-relax
     override LDFLAGS += \
         -m elf64lriscv \
         --no-relax
