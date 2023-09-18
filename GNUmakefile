@@ -13,9 +13,17 @@ define DEFAULT_VAR =
     endif
 endef
 
-# Compiler for building the 'limine' executable for the host.
+# Toolchain for building the 'limine' executable for the host.
 override DEFAULT_HOST_CC := cc
 $(eval $(call DEFAULT_VAR,HOST_CC,$(DEFAULT_HOST_CC)))
+override DEFAULT_HOST_CFLAGS := -g -O2 -pipe
+$(eval $(call DEFAULT_VAR,HOST_CFLAGS,$(DEFAULT_HOST_CFLAGS)))
+override DEFAULT_HOST_CPPFLAGS :=
+$(eval $(call DEFAULT_VAR,HOST_CPPFLAGS,$(DEFAULT_HOST_CPPFLAGS)))
+override DEFAULT_HOST_LDFLAGS :=
+$(eval $(call DEFAULT_VAR,HOST_LDFLAGS,$(DEFAULT_HOST_LDFLAGS)))
+override DEFAULT_HOST_LIBS :=
+$(eval $(call DEFAULT_VAR,HOST_LIBS,$(DEFAULT_HOST_LIBS)))
 
 # Target architecture to build for. Default to x86_64.
 override DEFAULT_ARCH := x86_64
@@ -82,7 +90,12 @@ ovmf-riscv64:
 
 limine:
 	git clone https://github.com/limine-bootloader/limine.git --branch=v5.x-branch-binary --depth=1
-	unset CC; unset CFLAGS; unset CPPFLAGS; unset LDFLAGS; unset LIBS; $(MAKE) -C limine CC="$(HOST_CC)"
+	$(MAKE) -C limine \
+		CC="$(HOST_CC)" \
+		CFLAGS="$(HOST_CFLAGS)" \
+		CPPFLAGS="$(HOST_CPPFLAGS)" \
+		LDFLAGS="$(HOST_LDFLAGS)" \
+		LIBS="$(HOST_LIBS)"
 
 .PHONY: kernel
 kernel:
