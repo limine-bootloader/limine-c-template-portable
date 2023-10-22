@@ -1,6 +1,6 @@
-# Limine Bare Bones
+# Portable Limine C Template
 
-This repository will show you how to set up a simple 64-bit kernel using Limine.
+This repository will demonstrate how to set up a basic portable 64-bit kernel in C using Limine.
 
 This project can be built using the host GCC toolchain on most Linux distros on x86_64 when targetting x86_64 (`ARCH=x86_64`), but it is recommended to set up an `*-elf` [cross compiler](https://wiki.osdev.org/GCC_Cross-Compiler) for the chosen target, or use a native cross toolchain such as Clang/LLVM.
 
