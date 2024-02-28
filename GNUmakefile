@@ -103,31 +103,33 @@ kernel:
 
 $(IMAGE_NAME).iso: limine kernel
 	rm -rf iso_root
-	mkdir -p iso_root
-	cp kernel/bin/kernel limine.cfg iso_root/
+	mkdir -p iso_root/boot
+	cp -v kernel/bin/kernel iso_root/boot/
+	mkdir -p iso_root/boot/limine
+	cp -v limine.cfg iso_root/boot/limine/
 	mkdir -p iso_root/EFI/BOOT
 ifeq ($(ARCH),x86_64)
-	cp -v limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin iso_root/
+	cp -v limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin iso_root/boot/limine/
 	cp -v limine/BOOTX64.EFI iso_root/EFI/BOOT/
 	cp -v limine/BOOTIA32.EFI iso_root/EFI/BOOT/
-	xorriso -as mkisofs -b limine-bios-cd.bin \
+	xorriso -as mkisofs -b boot/limine/limine-bios-cd.bin \
 		-no-emul-boot -boot-load-size 4 -boot-info-table \
-		--efi-boot limine-uefi-cd.bin \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
 		-efi-boot-part --efi-boot-image --protective-msdos-label \
 		iso_root -o $(IMAGE_NAME).iso
 	./limine/limine bios-install $(IMAGE_NAME).iso
 else ifeq ($(ARCH),aarch64)
-	cp -v limine/limine-uefi-cd.bin iso_root/
+	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
 	cp -v limine/BOOTAA64.EFI iso_root/EFI/BOOT/
 	xorriso -as mkisofs \
-		--efi-boot limine-uefi-cd.bin \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
 		-efi-boot-part --efi-boot-image --protective-msdos-label \
 		iso_root -o $(IMAGE_NAME).iso
 else ifeq ($(ARCH),riscv64)
-	cp -v limine/limine-uefi-cd.bin iso_root/
+	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
 	cp -v limine/BOOTRISCV64.EFI iso_root/EFI/BOOT/
 	xorriso -as mkisofs \
-		--efi-boot limine-uefi-cd.bin \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
 		-efi-boot-part --efi-boot-image --protective-msdos-label \
 		iso_root -o $(IMAGE_NAME).iso
 endif
@@ -141,10 +143,11 @@ ifeq ($(ARCH),x86_64)
 	./limine/limine bios-install $(IMAGE_NAME).hdd
 endif
 	mformat -i $(IMAGE_NAME).hdd@@1M
-	mmd -i $(IMAGE_NAME).hdd@@1M ::/EFI ::/EFI/BOOT
-	mcopy -i $(IMAGE_NAME).hdd@@1M kernel/bin/kernel limine.cfg ::/
+	mmd -i $(IMAGE_NAME).hdd@@1M ::/EFI ::/EFI/BOOT ::/boot ::/boot/limine
+	mcopy -i $(IMAGE_NAME).hdd@@1M kernel/bin/kernel ::/boot
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine.cfg ::/boot/limine
 ifeq ($(ARCH),x86_64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/limine-bios.sys ::/EFI/BOOT
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/limine-bios.sys ::/boot/limine
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTX64.EFI ::/EFI/BOOT
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTIA32.EFI ::/EFI/BOOT
 else ifeq ($(ARCH),aarch64)
